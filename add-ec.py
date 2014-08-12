@@ -2,12 +2,12 @@
 '''
 Example:
 $ python add-ec.py --total 15 
-				   --split 10 
-				   --input_file Penguins.jpg 
-				   --local_directory /home/paulin/Distributed-Resilient-Storage/fec/ 
-				   --remote_directory /gridpp/ptodev/ 
-				   --se_list se_list.txt
-				   --processes 4
+                   --split 10 
+                   --input_file Penguins.jpg 
+                   --local_directory /home/paulin/Distributed-Resilient-Storage/fec/ 
+                   --remote_directory /gridpp/ptodev/ 
+                   --se_list se_list.txt
+                   --processes 4
 '''
 
 #######################################################################
