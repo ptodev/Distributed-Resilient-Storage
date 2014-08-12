@@ -71,7 +71,7 @@ cliParams = Params()
 Script.registerSwitch("sp:", "split=", "Number of files the original will be split into.", cliParams.setSplit)
 Script.registerSwitch("t:", "total=", "Total number of files (split + EC generated ones).", cliParams.setTotal)
 Script.registerSwitch("rd:", "remote_directory=", "Direcory where the files will be uploaded.", cliParams.setRemDir)
-Script.registerSwitch("ld:", "local_directory=", "Location of the temporary files until they are uploaded.", cliParams.setLocDir)
+Script.registerSwitch("td:", "temp_directory=", "Location of the temporary files until they are uploaded.", cliParams.setLocDir)
 Script.registerSwitch("i:", "input_file=", "Location of the file to be uploaded.", cliParams.setInputFile)
 Script.registerSwitch("se:", "se_list=", "A file with names of usable SEs.", cliParams.setSEList)
 Script.registerSwitch("pr:", "processes=", "Number of processes to run concurrently.", cliParams.setProcesses)
@@ -161,7 +161,7 @@ def sanitize_directory(input_str):
 		input_str = input_str + '/'
 	return input_str
 
-def sanitizeProesses(processes):
+def sanitizeProcesses(processes):
 	if(processes <= 0):
 		return 1
 	return processes
@@ -183,7 +183,7 @@ if __name__ == '__main__':
 	#######################################################################
 	rem_dir = sanitize_directory(rem_dir)
 	loc_dir = sanitize_directory(loc_dir)
-	processes = sanitizeProesses(processes)
+	processes = sanitizeProcesses(processes)
 
 	#######################################################################
 	######################## CHECK SE AVAILABILITY ########################
@@ -351,7 +351,7 @@ if __name__ == '__main__':
 	print "Cleaning up the local EC files... ",
 	files = glob.glob(loc_dir + '*')
 	for f in files:
-	    os.remove(f)
+		os.remove(f)
 	print "done!"
 
 	#######################################################################
