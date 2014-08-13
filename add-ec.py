@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 '''
+A script to erasure code and upload a single file to a location on the catalogue.
+The required input parameters are "total", "split", "input_file", "temporary_directory" and "remote_directory"
+
 Example:
 $ python add-ec.py --total 15 
                    --split 10 
@@ -8,6 +11,14 @@ $ python add-ec.py --total 15
                    --remote_directory /gridpp/ptodev/ 
                    --se_list se_list.txt
                    --processes 4
+
+"split" is the number of files the original will be split into.
+"total" is the total number of files, ie the erasure coded files will be (total-split).
+"se_list" is a file containing the SEs used for uploading and looks like this:
+GLASGOW-disk
+BIRMINGHAM-disk
+LIVERPOOL-disk
+"processes" is the number of concurrent processes that will be ran.
 '''
 
 #######################################################################
@@ -161,7 +172,6 @@ def get_se_status(testdir):
         print "Error code:", e.code
 
     return ses_working, ses_not_working
-
 
 class Counter(object):
     # A counter class for easier incrementing
