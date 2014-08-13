@@ -7,8 +7,8 @@ The aim of this project is to build on top of the DIRAC client to provide easy d
 **add-ec.py**: Uploads a single file to a location on the catalogue. If the file is named test.txt it will be turned into multiple smaller files whilch will then be uploaded to a directory called _test.txt in the user defined directory, ie /gridpp/username.
 
 **get-ec.py**: Downloads the erasure coded files. The input could be:
-* A *directory*, ie `/gridpp/username/_test.txt`
-* The *original filename*, ie `test.txt` - then get-ec.py uses metadata to search for the file
+* A *directory*, eg. `/gridpp/username/_test.txt`
+* The *original filename*, eg. `test.txt` - then get-ec.py uses metadata to search for the file
 
 **se-check-cli.py**: Tests on which storage elements shown by `dirac-dms-show-se-status` the user has write privileges.
 
