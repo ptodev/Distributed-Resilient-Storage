@@ -29,7 +29,6 @@ Next, the installation has to be configured, so make sure you have you keys in `
 ```
 $ dirac-proxy-init -x
 $ dirac-configure defaults-gridpp.cfg
-
 ```
 This concludes the DIRAC client installation, but keep in mind that the `$ dirac-proxy-init` command has to be ran occasionally to generate a new proxy.
 
