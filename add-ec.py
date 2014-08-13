@@ -4,7 +4,7 @@ Example:
 $ python add-ec.py --total 15 
                    --split 10 
                    --input_file Penguins.jpg 
-                   --temp_directory /home/paulin/Distributed-Resilient-Storage/fec/ 
+                   --temporary_directory /home/paulin/Distributed-Resilient-Storage/fec/ 
                    --remote_directory /gridpp/ptodev/ 
                    --se_list se_list.txt
                    --processes 4
@@ -20,6 +20,7 @@ from DIRAC.Core.Base import Script
 class Params:
     def __init__(self):
         self.SEList = ''
+        self.TempDir = '/tmp/'
         self.Processes = int(math.ceil(multiprocessing.cpu_count()/2.0))
 
     def setSplit(self, value):
@@ -40,11 +41,11 @@ class Params:
     def getRemDir(self):
         return self.RemDir
 
-    def setLocDir(self, value):
-        self.LocDir = value
+    def setTempDir(self, value):
+        self.TempDir = value
         return S_OK()
-    def getLocDir(self):
-        return self.LocDir
+    def getTempDir(self):
+        return self.TempDir
 
     def setInputFile(self, value):
         self.InputFile = value
@@ -71,7 +72,7 @@ cliParams = Params()
 Script.registerSwitch("sp:", "split=", "Number of files the original will be split into.", cliParams.setSplit)
 Script.registerSwitch("t:", "total=", "Total number of files (split + EC generated ones).", cliParams.setTotal)
 Script.registerSwitch("rd:", "remote_directory=", "Direcory where the files will be uploaded.", cliParams.setRemDir)
-Script.registerSwitch("td:", "temp_directory=", "Location of the temporary files until they are uploaded.", cliParams.setLocDir)
+Script.registerSwitch("td:", "temporary_directory=", "Location of the temporary files until they are uploaded.", cliParams.setTempDir)
 Script.registerSwitch("i:", "input_file=", "Location of the file to be uploaded.", cliParams.setInputFile)
 Script.registerSwitch("se:", "se_list=", "A file with names of usable SEs.", cliParams.setSEList)
 Script.registerSwitch("pr:", "processes=", "Number of processes to run concurrently.", cliParams.setProcesses)

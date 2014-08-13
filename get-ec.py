@@ -13,6 +13,7 @@ from DIRAC.Core.Base import Script
 
 class Params:
 	def __init__(self):
+		self.TempDir = '/tmp/'
 		self.Processes = int(math.ceil(multiprocessing.cpu_count()/2.0))
 
 	def setTempDir(self, value):
