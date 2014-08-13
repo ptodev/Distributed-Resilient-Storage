@@ -4,7 +4,7 @@ Example:
 $ python add-ec.py --total 15 
                    --split 10 
                    --input_file Penguins.jpg 
-                   --local_directory /home/paulin/Distributed-Resilient-Storage/fec/ 
+                   --temp_directory /home/paulin/Distributed-Resilient-Storage/fec/ 
                    --remote_directory /gridpp/ptodev/ 
                    --se_list se_list.txt
                    --processes 4
@@ -13,7 +13,7 @@ $ python add-ec.py --total 15
 #######################################################################
 ######################### GET INPUT AGRUMENTS #########################
 #######################################################################
-import zfec, sys, os, glob, multiprocessing, time, itertools, math
+import zfec, sys, os, glob, multiprocessing, time, itertools, math, subprocess
 from DIRAC import S_OK, S_ERROR, gLogger, exit
 from DIRAC.Core.Base import Script
 
@@ -85,7 +85,83 @@ servicesList = Script.getPositionalArgs()
 
 import DIRAC.Interfaces.API.Dirac as dirac_api
 import DIRAC.Resources.Catalog.FileCatalogClient as FCC
-import se_check
+
+def get_se_status(testdir):
+	# A function that tests the SEs visible by dirac-dms-show-se-status
+	# by adding a file to them to see if they work.
+
+    # Name of the file on the SE
+    testfile_remote = '1'
+
+    # Create a file to upload for testing
+    testfile_local = '1'
+    while(True):
+        if(os.path.isfile(testfile_local)):
+            testfile_local = str(int(testfile_local)+1)
+        else:
+            break
+    local_file = open(testfile_local, 'w')
+    local_file.write('A file for testing whether an SE works.')
+    local_file.close()
+
+    ############################## GET A LIST OF THE SEs ###################################
+    se_stat = subprocess.Popen("dirac-dms-show-se-status", shell=True, stdout=subprocess.PIPE).stdout.read()
+
+    # Split into lines
+    se_stat = se_stat.split('\n')
+
+    # Clean unnecessary lines
+    se_stat = se_stat[2:-1]
+
+    # Split each line into strings
+    for se_index in range(len(se_stat)):
+        se_stat[se_index] = se_stat[se_index].split()
+
+    # Create a list with the names of the SEs
+    ses = []
+    for se in se_stat:
+        ses.append(se[0])
+
+    ############################### TEST WHICH SEs WORK ####################################
+    dirac = dirac_api.Dirac()
+
+    ses_not_working = []
+    ses_working = []
+    small_log = ''
+    existing_file_error = "{'Message': 'putAndRegister: \
+    This file GUID already exists for another file. \
+    Please remove it and try again. True', 'OK': False}"
+
+    # This is for surpressing any print statements from dirac.addFile()
+    old_stdout = sys.stdout
+    sys.stdout = open(os.devnull, 'w')
+
+    for se in ses:
+        while (True):
+            # Try adding a test file
+            output = dirac.addFile(testdir+testfile_remote, testfile_local, se)
+            if(str(output) == existing_file_error):
+                testfile_remote = str(int(testfile_remote)+1)
+            else:
+                # Remove the test file
+                dirac.removeFile(testdir+testfile_remote)
+                break
+        if(not output['OK']):
+            ses_not_working.append(se)
+        else:
+            ses_working.append(se)
+
+    sys.stdout.close()
+    sys.stdout = old_stdout
+
+    try:
+        os.remove(testfile_local)
+    except OSError as e:
+        print "Failed to remove file" + testfile_local + " with:", e.strerror
+        print "Error code:", e.code
+
+    return ses_working, ses_not_working
+
 
 class Counter(object):
 	# A counter class for easier incrementing
@@ -197,7 +273,7 @@ if __name__ == '__main__':
 	# If there is no list with SEs, check which ones are available with the se_check.py script
 	else:
 		print "Checking SE availability...",
-		res = se_check.get_se_status(rem_dir)
+		res = get_se_status(rem_dir)
 		ses_working = res[0]
 		ses_not_working = res[1]
 
