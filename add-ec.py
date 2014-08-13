@@ -20,7 +20,6 @@ from DIRAC.Core.Base import Script
 class Params:
     def __init__(self):
         self.SEList = ''
-        self.TempDir = '/tmp/'
         self.Processes = int(math.ceil(multiprocessing.cpu_count()/2.0))
 
     def setSplit(self, value):
@@ -247,7 +246,7 @@ if __name__ == '__main__':
     split = int(cliParams.getSplit())
     total = int(cliParams.getTotal())
     rem_dir = cliParams.getRemDir()
-    loc_dir = cliParams.getLocDir()
+    loc_dir = cliParams.getTempDir()
     ec_file = open(cliParams.getInputFile(), 'r')
     if(cliParams.getSEList() != ''):
         se_list = open(cliParams.getSEList())
@@ -289,7 +288,7 @@ if __name__ == '__main__':
     ######################### DO ERASURE ENCODING #########################
     #######################################################################
     # Clean the local fec folder
-    print "Cleaning up the ./fec/ folder... ",
+    print "Cleaning up the temporary folder... ",
     files = glob.glob(loc_dir + '*')
     for f in files:
         os.remove(f)
