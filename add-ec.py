@@ -19,6 +19,7 @@ GLASGOW-disk
 BIRMINGHAM-disk
 LIVERPOOL-disk
 "processes" is the number of concurrent processes that will be ran.
+"temporary_directory" is where the .fec (intermediate) files will be stored
 '''
 
 #######################################################################
@@ -204,7 +205,7 @@ def addFileCC_func(args):
     # A function needed to unpack the two arguments
     return addFileCC(*args)
 
-def get_concurrent_parameters(total, loc_dir, rem_ec_dir, ses_working):
+def get_parameters(total, loc_dir, rem_ec_dir, ses_working):
     # Set a counter for the current SE
     i = 0
     # Set a counter for the current file
@@ -222,16 +223,16 @@ def get_concurrent_parameters(total, loc_dir, rem_ec_dir, ses_working):
         if(i == len(ses_working)):
             i = 0
         # Get the file numbering right, like "Penguins.jpg.01_15.fec" ...
-        if(j < 10):
-            num = '0'+str(j)
+        
+            # The number of zeros depends on the total number of files
+            # eg. Penguins.jpg.0_1.fec or Penguins.jpg.00_15.fec
+        num = ('0'*(len(str(total))-len(str(j)))) + str(j)
         # ...and for such as "Penguins.jpg.13_15.fec"
-        else:
-            num = str(j)
 
-        local_path = loc_dir + ec_file.name + "." + num + "_" + str(total) + ".fec"
+        local_path = loc_dir + ec_file.name.split('/')[-1] + "." + num + "_" + str(total) + ".fec"
         local_paths.append(local_path)
 
-        remote_path = rem_ec_dir + ec_file.name + "." + num + "_" + str(total) + ".fec"
+        remote_path = rem_ec_dir + ec_file.name.split('/')[-1] + "." + num + "_" + str(total) + ".fec"
         remote_paths.append(remote_path)
 
         ses.append(ses_working[i])
@@ -252,12 +253,19 @@ def sanitizeProcesses(processes):
         return 1
     return processes
 
+def format_time(num, precision):
+    total_time = str(num)
+    total_time = total_time.split('.')
+    if(precision <= 0):
+        return num[0]
+    return total_time[0] + '.' + total_time[1][:precision]
+
 if __name__ == '__main__':
     split = int(cliParams.getSplit())
     total = int(cliParams.getTotal())
     rem_dir = cliParams.getRemDir()
     loc_dir = cliParams.getTempDir()
-    ec_file = open(cliParams.getInputFile(), 'r')
+    ec_file = open(cliParams.getInputFile(), 'rb')
     if(cliParams.getSEList() != ''):
         se_list = open(cliParams.getSEList())
     else:
@@ -298,7 +306,7 @@ if __name__ == '__main__':
     ######################### DO ERASURE ENCODING #########################
     #######################################################################
     # Clean the local fec folder
-    print "Cleaning up the temporary folder... ",
+    print "Cleaning up the " + loc_dir + " folder... ",
     files = glob.glob(loc_dir + '*')
     for f in files:
         os.remove(f)
@@ -310,7 +318,7 @@ if __name__ == '__main__':
     fsize = ec_file.tell()
     ec_file.seek(0, 0)
     # Split the file and do erasure encosing
-    zfec.filefec.encode_to_files(ec_file, fsize, loc_dir, ec_file.name, split, total, overwrite=False, verbose=False)
+    zfec.filefec.encode_to_files(ec_file, fsize, loc_dir, ec_file.name.split('/')[-1], split, total, overwrite=False, verbose=False)
 
     print 'done!'
 
@@ -318,7 +326,7 @@ if __name__ == '__main__':
     ########################### CREATE DIRECTORY ##########################
     #######################################################################
     fc = FCC.FileCatalogClient()
-    rem_ec_dir = rem_dir + '_' + ec_file.name + '/'
+    rem_ec_dir = rem_dir + '_' + ec_file.name.split('/')[-1] + '/'
 
     # See if the directory exists
     output = fc.isDirectory(rem_ec_dir)
@@ -368,7 +376,7 @@ if __name__ == '__main__':
     #######################################################################
     ############################# UPLOAD FILES ############################
     #######################################################################
-    (remote_paths, local_paths, ses) = get_concurrent_parameters(total, loc_dir, rem_ec_dir, ses_working)
+    (remote_paths, local_paths, ses) = get_parameters(total, loc_dir, rem_ec_dir, ses_working)
     print 'Uploading files to ' + rem_ec_dir
     
     if(processes == 1):
@@ -394,7 +402,9 @@ if __name__ == '__main__':
                 print 'ERROR: ' + output['Message']
         
         time2 = time.time()
-        print 'Total time for upload: ' + str(time2-time1)[:4]
+        
+        print 'Total time for upload: ' + format_time(time2-time1, 2) + ' seconds.'
+
     else:
         print 'A multiprocessing download method will be used!'
         print 'Number of cores on the computer: ' + str(multiprocessing.cpu_count())
@@ -429,7 +439,8 @@ if __name__ == '__main__':
                 break
 
         time2 = time.time()
-        print 'Total time for upload: ' + str(time2-time1)[:4]
+        
+        print 'Total time for upload: ' + format_time(time2-time1, 2) + ' seconds.'
 
     #######################################################################
     ################# CLEAN THE LOCAL ERASURE CODED FILES #################
