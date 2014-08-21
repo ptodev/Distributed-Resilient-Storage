@@ -456,7 +456,7 @@ if __name__ == '__main__':
     #######################################################################
     print 'Adding metadata... ',
     
-    metadata = (('EC_FILE', ec_file.name), ('EC_VERSION', '0.1'), ('TOTAL', total), ('SPLIT', split))
+    metadata = (('EC_FILE', ec_file.name.split('/')[-1]), ('EC_VERSION', '0.1'), ('TOTAL', total), ('SPLIT', split))
     
     for i in range(len(remote_paths)):
         for j in range(len(metadata)):
