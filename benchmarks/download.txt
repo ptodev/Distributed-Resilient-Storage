@@ -1,0 +1,40 @@
+=========================================================
+                  DOWNLOAD  BENCHMARKS
+=========================================================
+1 file @ 756 KB - 5.32 seconds
+--------------------------------------------
+downloaded: 10
+size:  75 KB/piece
+
+1 core  |  1 process    |  41 (4 sec per file)
+1 core  |  2 processes  |  16 (5 sec per file)
+1 core  |  3 processes  |  16 (5 sec per file)
+1 core  |  4 processes  |  16 (5 sec per file)
+
+2 core  |  1 process    |  42 (4 sec per file)
+2 core  |  2 processes  |  15 (5 sec per file) {4 min to 6 max}
+2 core  |  3 processes  |  14 (4.5 sec per file)
+2 core  |  4 processes  |  15 (5 sec per file) {6.5 min to 5 max}
+
+============================================
+1 file @ 2.4 GB - 124 seconds
+--------------------------------------------
+downloaded files: 10
+size:  243 MB/piece
+
+1 core  |  1 process    |  143 (14)
+1 core  |  2 processes  |  162 (50) {16 seconds min, 50 max!}
+1 core  |  3 processes  |  157 (53)
+1 core  |  4 processes  |  159 (53)
+
+2 core  |  1 process    |  152 (15)
+2 core  |  2 processes  |  169 (55)
+2 core  |  3 processes  |  168 (57)
+2 core  |  4 processes  |  157 (53)
+
+============================================
+
+1 file @ 208.3 MB - 14.5 seconds
+10 files @ 20.8 MB each, 1 core, 1 processes - 60 seconds (6 sec per file)
+10 files @ 20.8 MB each, 1 core, 2 processes - 20 seconds (7 sec per file)
+10 files @ 20.8 MB each, 2 core, 4 processes - 23 seconds (8 sec per file)

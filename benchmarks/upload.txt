@@ -1,0 +1,69 @@
+=========================================================
+              BENCHMARKS WITH REDUNDANCY
+=========================================================
+
+total: 15
+split: 10
+size:  75 KB/piece
+
+1 core  |  1 process    |  89/78 (5 sec per file)
+1 core  |  2 processes  |  0/26 (6 sec per file)
+1 core  |  3 processes  |  30/27 (6 sec per file)
+1 core  |  4 processes  |  30/26 (6 sec per file)
+
+2 core  |  1 process    |  93 (6 sec per file)
+2 core  |  2 processes  |  25 (6.5 sec per file)
+2 core  |  3 processes  |  27 (6 sec per file)
+2 core  |  4 processes  |  25 (6 sec per file)
+
+============================================
+
+total: 15
+split: 10
+size:  243 MB/piece
+
+1 core  |  1 process    |  EC  |  305 (20 sec per file)
+1 core  |  2 processes  |  EC  |  286 (73 sec per file)
+1 core  |  3 processes  |  EC  |  273 (70 sec per file)
+1 core  |  4 processes  |  EC  |  265 (60 sec per file)
+
+2 core  |  1 process    |  EC  |  323 (20 sec per file)
+2 core  |  2 processes  |  EC  |  258 (60 sec per file)
+2 core  |  3 processes  |  EC  |  255 (60 sec per file)
+2 core  |  4 processes  |  EC  |  296/272 (80/70 sec per file)
+
+First ones to conclude take more time - 80, last ones - 60
+
+=========================================================
+              BENCHMARKS WITHOUT REDUNDANCY
+=========================================================
+
+1 file @ 756 KB - 6 seconds
+10 files @ 75.6 KB each, 1 core, 1 process - 54 seconds (5.5 sec per file)
+10 files @ 75.6 KB each, 1 core, 4 processes - 20 seconds (7 sec per file) {9 for the first 4, 5.5 for the last 6}
+10 files @ 75.6 KB each, 2 cores, 2 processes - 21 seconds (7 sec per file)
+10 files @ 75.6 KB each, 2 cores, 4 processes - 21 seconds (7 sec per file)
+
+============================================
+
+1 file @ 208.3 MB - 60 seconds
+10 files @ 20.8 MB each, 1 core, 1 processes - 106 seconds (11 sec per file)
+10 files @ 20.8 MB each, 1 core, 4 processes - 37 seconds (13 sec per file) {18 for the first 4, 9 for the last 6}
+10 files @ 20.8 MB each, 2 cores, 2 processes - 38 seconds (13 sec per file) {15 for the first 4, 11 for the last 6}
+10 files @ 20.8 MB each, 2 cores, 4 processes - 41 seconds (13 sec per file) {19 for the first 4, 11 for the last 6}
+
+============================================
+
+1 file @ 930 MB - 63 seconds
+10 files @  MB each, 1 core, 1 process - 115 seconds (12 sec per file)
+10 files @  MB each, 1 core, 4 processes - 80 seconds (35 sec per file)
+10 files @  MB each, 2 cores, 2 processes - 75 seconds (30 sec per file)
+10 files @  MB each, 2 cores, 4 processes - 79 seconds (30 sec per file)
+
+============================================
+
+1 file @ 2.4 GB - 142 seconds
+10 files @ 243 GB each, 1 core, 1 process - 206 seconds (20 sec per file)
+10 files @ 243 GB each, 1 core, 4 processes -  seconds (80 sec per file)
+10 files @ 243 GB each, 2 core, 2 processes - 215 seconds (85 sec per file)
+10 files @ 243 GB each, 2 core, 4 processes - 194 seconds (80 sec per file)
