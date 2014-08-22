@@ -2,6 +2,7 @@
 '''
 A script to erasure code and upload a single file to a location on the catalogue.
 The required input parameters are "total", "split", "input_file", "temporary_directory" and "remote_directory"
+IMORTANT: ONLY ABSOLUTE PATHS SHOULD BE USED
 
 Example:
 $ python add-ec.py --total 15 
