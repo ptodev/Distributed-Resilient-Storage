@@ -2,6 +2,7 @@
 '''
 A script to download an erasure coded file from the catalogue.
 The required input parameters are "input_file", "temporary_directory" and "output_directory"
+IMORTANT: ONLY ABSOLUTE PATHS SHOULD BE USED
 
 --input_file could be /gridpp/ptodev/_Penguins.jpg/ or just Penguins.jpg
 $ python get-ec.py --temporary_directory /home/paulin/Distributed-Resilient-Storage/fec/ 
