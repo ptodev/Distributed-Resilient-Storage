@@ -37,10 +37,13 @@ The only required module is the [zfec](https://pypi.python.org/pypi/zfec) extent
 ````
 $ easy_install zfec
 ```
-Then clone this repository and copy the files to the dirac directory:
+Then clone this repository:
 ```
 $ git clone https://github.com/ptodev/Distributed-Resilient-Storage.git
 $ cd Distributed-Resilient-Storage
+```
+Now you could either use the scripts from this folder, or try to integrate them with DIRAC, which has not been tested and could have unexpected consequences:
+```
 $ cp add-ec.py ~/dirac/DIRAC/DataManagementSystem/scripts/dirac-dms-add-file-ec.py
 $ cp get-ec.py ~/dirac/DIRAC/DataManagementSystem/scripts/dirac-dms-get-file-ec.py
 $ cp se-check.py ~/dirac/DIRAC/DataManagementSystem/scripts/dirac-dms-se-check.py
